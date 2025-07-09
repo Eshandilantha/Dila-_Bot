@@ -81,7 +81,7 @@ async function connectToWA() {
     generateHighQualityLinkPreview: true,
   });
 
-  danuwa.ev.on('connection.update', async (update) => {
+  DilaBot.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === 'close') {
       if (lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
