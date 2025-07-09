@@ -50,7 +50,7 @@ async function ensureSessionFile() {
 
       fs.mkdirSync(path.join(__dirname, '/auth_info_baileys/'), { recursive: true });
       fs.writeFileSync(credsPath, data);
-      console.log("✅ Session downloaded and saved. Restarting Dila bot...");
+      console.log("✅ Session downloaded and saved. Restarting Dilabot...");
       setTimeout(() => {
         connectToWA();
       }, 2000);
@@ -63,11 +63,11 @@ async function ensureSessionFile() {
 }
 
 async function connectToWA() {
-  console.log("Connecting Dila-Bot 🧬...");
+  console.log("Connecting DilaBot 🧬...");
   const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, '/auth_info_baileys/'));
   const { version } = await fetchLatestBaileysVersion();
 
-  const Dila-Bot = makeWASocket({
+  const DilaBot = makeWASocket({
     logger: P({ level: 'silent' }),
     printQRInTerminal: false,
     browser: Browsers.macOS("Firefox"),
@@ -85,11 +85,11 @@ async function connectToWA() {
         connectToWA();
       }
     } else if (connection === 'open') {
-      console.log('✅ Dila-Bot connected to WhatsApp');
+      console.log('✅ DilaBot connected to WhatsApp');
 
-      const up = `Dila-Bot Connected ✅\n\nPREFIX: ${prefix}`;
-      await danuwa.sendMessage(ownerNumber[0] + "@s.whatsapp.net", {
-        image: { url: `https://github.com/DANUWA-MD/DANUWA-MD/blob/main/images/DANUWA-MD.png?raw=true` },
+      const up = `DilaBot Connected ✅\n\nPREFIX: ${prefix}`;
+      await dilabot.sendMessage(ownerNumber[0] + "@s.whatsapp.net", {
+        image: { url: `https://github.com/Eshandilantha/Dila-_Bot/blob/main/images/cd1e54ef-a13c-4061-a436-69953b5b0eb7.jpg?raw=true` },
         caption: up
       });
 
@@ -179,7 +179,7 @@ async function connectToWA() {
 ensureSessionFile();
 
 app.get("/", (req, res) => {
-  res.send("Hey, Dila-Bot Started✅");
+  res.send("Hey, DilaBot Started✅");
 });
 
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
