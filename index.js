@@ -1,6 +1,9 @@
 const {
   default: makeWASocket,
-  useMultiFileAuthState,
+  useMu1
+2
+3
+ltiFileAuthState,
   DisconnectReason,
   jidNormalizedUser,
   getContentType,
@@ -101,12 +104,12 @@ async function connectToWA() {
     }
   });
 
-  danuwa.ev.on('creds.update', saveCreds);
+  DilaBot.ev.on('creds.update', saveCreds);
 
-  danuwa.ev.on('messages.upsert', async ({ messages }) => {
+  DilaBot.ev.on('messages.upsert', async ({ messages }) => {
     for (const msg of messages) {
       if (msg.messageStubType === 68) {
-        await danuwa.sendMessageAck(msg.key);
+        await DilaBot.sendMessageAck(msg.key);
       }
     }
 
@@ -116,7 +119,7 @@ async function connectToWA() {
     mek.message = getContentType(mek.message) === 'ephemeralMessage' ? mek.message.ephemeralMessage.message : mek.message;
     if (mek.key.remoteJid === 'status@broadcast') return;
 
-    const m = sms(danuwa, mek);
+    const m = sms(DilaBot, mek);
     const type = getContentType(mek.message);
     const from = mek.key.remoteJid;
     const body = type === 'conversation' ? mek.message.conversation : mek.message[type]?.text || mek.message[type]?.caption || '';
@@ -125,30 +128,30 @@ async function connectToWA() {
     const args = body.trim().split(/ +/).slice(1);
     const q = args.join(' ');
 
-    const sender = mek.key.fromMe ? danuwa.user.id : (mek.key.participant || mek.key.remoteJid);
+    const sender = mek.key.fromMe ? DilaBot.user.id : (mek.key.participant || mek.key.remoteJid);
     const senderNumber = sender.split('@')[0];
     const isGroup = from.endsWith('@g.us');
-    const botNumber = danuwa.user.id.split(':')[0];
+    const botNumber = DilaBot.user.id.split(':')[0];
     const pushname = mek.pushName || 'Sin Nombre';
     const isMe = botNumber.includes(senderNumber);
     const isOwner = ownerNumber.includes(senderNumber) || isMe;
-    const botNumber2 = await jidNormalizedUser(danuwa.user.id);
+    const botNumber2 = await jidNormalizedUser(DilaBot.user.id);
 
-    const groupMetadata = isGroup ? await danuwa.groupMetadata(from).catch(() => {}) : '';
+    const groupMetadata = isGroup ? await DilaBot.groupMetadata(from).catch(() => {}) : '';
     const groupName = isGroup ? groupMetadata.subject : '';
     const participants = isGroup ? groupMetadata.participants : '';
     const groupAdmins = isGroup ? await getGroupAdmins(participants) : '';
     const isBotAdmins = isGroup ? groupAdmins.includes(botNumber2) : false;
     const isAdmins = isGroup ? groupAdmins.includes(sender) : false;
 
-    const reply = (text) => danuwa.sendMessage(from, { text }, { quoted: mek });
+    const reply = (text) => DilaBot.sendMessage(from, { text }, { quoted: mek });
 
     if (isCmd) {
       const cmd = commands.find((c) => c.pattern === commandName || (c.alias && c.alias.includes(commandName)));
       if (cmd) {
-        if (cmd.react) danuwa.sendMessage(from, { react: { text: cmd.react, key: mek.key } });
+        if (cmd.react) DilaBot.sendMessage(from, { react: { text: cmd.react, key: mek.key } });
         try {
-          cmd.function(danuwa, mek, m, {
+          cmd.function(DilaBot, mek, m, {
             from, quoted: mek, body, isCmd, command: commandName, args, q,
             isGroup, sender, senderNumber, botNumber2, botNumber, pushname,
             isMe, isOwner, groupMetadata, groupName, participants, groupAdmins,
@@ -164,7 +167,7 @@ async function connectToWA() {
     for (const handler of replyHandlers) {
       if (handler.filter(replyText, { sender, message: mek })) {
         try {
-          await handler.function(danuwa, mek, m, {
+          await handler.function(DilaBot, mek, m, {
             from, quoted: mek, body: replyText, sender, reply,
           });
           break;
