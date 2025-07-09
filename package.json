@@ -1,12 +1,12 @@
 {
-  "name": "Dila-Bot",
+  "name": "DilaBot",
   "version": "1.0.0",
   "description": "A Powerfull Whatsapp Bot",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js --deep-monitoring --attach --name Dila-Bot",
-    "stop": "pm2 stop Dila-Bot",
-    "restart": "pm2 restart Dila-Bot"
+    "start": "pm2 start index.js --deep-monitoring --attach --name DilaBot",
+    "stop": "pm2 stop DilaBot",
+    "restart": "pm2 restart DilaBot"
   },
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.18",
